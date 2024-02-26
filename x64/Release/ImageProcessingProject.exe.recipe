@@ -7,6 +7,9 @@
   </ProjectOutputs>
   <ContentFiles>
     <ContentFile>
+      <FullPath>D:\VS Projects\ImageProcessingProject\src\x64\Release\BlurPixelShader.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
       <FullPath>D:\VS Projects\ImageProcessingProject\src\x64\Release\ColorInversionPixelShader.cso</FullPath>
     </ContentFile>
     <ContentFile>
@@ -14,6 +17,21 @@
     </ContentFile>
     <ContentFile>
       <FullPath>D:\VS Projects\ImageProcessingProject\src\x64\Release\DefaultVertexShader.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>D:\VS Projects\ImageProcessingProject\src\x64\Release\EdgeDetectionPixelShader.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>D:\VS Projects\ImageProcessingProject\src\x64\Release\FishEyeVertexShader.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>D:\VS Projects\ImageProcessingProject\src\x64\Release\MirrorVertexShader.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>D:\VS Projects\ImageProcessingProject\src\x64\Release\EqualizationPixelShader.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>D:\VS Projects\ImageProcessingProject\src\x64\Release\ShrinkVertexShader.cso</FullPath>
     </ContentFile>
   </ContentFiles>
   <SatelliteDlls />

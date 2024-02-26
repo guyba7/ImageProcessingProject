@@ -3,7 +3,7 @@
 #include <dxgi.h>
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
-#include <iostream> // Include this for std::cerr and std::cout
+#include <iostream> // Include this for std::cout and std::cout
 #include <windows.h> // Ensure you have this for GetConsoleWindow()
 #include <string>
 
@@ -20,8 +20,6 @@ public:
     bool createShadersFromFiles(LPCWSTR, LPCWSTR, ID3D11VertexShader**, ID3D11PixelShader**, string*);
 
     bool applyShaderOnImageData(unsigned char*, int, int, int, ID3D11PixelShader*, ID3D11VertexShader*, string*);
-
-    bool test3D(unsigned char* , int, int, int); // Declaration of the function
 
 private:
 

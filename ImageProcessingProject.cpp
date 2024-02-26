@@ -35,6 +35,8 @@ namespace fs = std::filesystem;
 #define ENDING_MESSAGE "Image with effect created successfully!\n"\
                         "Press ENTER to create a new image or press ESC to close application.\n"
 
+#define ENDING_MESSAGE_ERORR "Image processing failed...\n"\
+                             "Press ENTER to create a new image or press ESC to close application.\n"
 
 ShaderManager* m_shaderManager = new ShaderManager();
 
@@ -46,7 +48,7 @@ static void InitializeLists(vector<path>& images, vector<BaseEffect*>& effects) 
     images.clear();
 
     fs::directory_iterator it(inputImagesPath);
-     
+
     while (it != fs::directory_iterator()) {
         fs::directory_entry entry = *it;
         if (entry.is_regular_file() && entry.path().extension().string() == ".png") {
@@ -59,7 +61,14 @@ static void InitializeLists(vector<path>& images, vector<BaseEffect*>& effects) 
     // Initialize effects (remains unchanged)
     effects = {
         new BlurEffect(),
-        new ColorInversionEffect()};
+        new ColorInversionEffect(),
+        new MirrorEffect(),
+        new ShrinkEffect(),
+        new EdgeDetectionEffect(),
+        new EqualizationEffect(),
+        new FishEyeEffect()
+    };
+
 }
 
 
@@ -67,7 +76,7 @@ static void DisplayMenu(const vector<string>& options, int highlight, const stri
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
     // Clear the screen
-    system("cls");
+   system("cls");
     
     // Display instruction
     SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED);
@@ -148,22 +157,34 @@ static void PromptWelcomeScreen() {
     }
 }
 
-static bool PromptEndingScreen() {
+static bool PromptEndingScreen(bool isSuccess) {
+
+    if (!isSuccess)
+        Sleep(5000);
 
     // Clear the screen
-    system("cls");
+   system("cls");
+
+    if (isSuccess)
+    {
+        std::cout << ENDING_MESSAGE;
+    }
+    else
+    {
+        std::cout << ENDING_MESSAGE_ERORR;
+    }
 
     HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
     INPUT_RECORD inputRecord;
     DWORD eventsRead;
 
-    std::cout << ENDING_MESSAGE;
+
 
     while (true) {
         ReadConsoleInput(hStdin, &inputRecord, 1, &eventsRead);
 
         if (inputRecord.EventType == KEY_EVENT && inputRecord.Event.KeyEvent.bKeyDown) {
-            switch (inputRecord.Event.KeyEvent.wVirtualKeyCode){
+            switch (inputRecord.Event.KeyEvent.wVirtualKeyCode) {
             case VK_RETURN:
                 return TRUE;
             case VK_ESCAPE:
@@ -178,7 +199,7 @@ static bool ApplyEffectToImage(path imagePath, BaseEffect* effect) {
     
 
     if (!fs::exists(imagePath)){
-        std::cerr << "Invalid image path: " << imagePath << std::endl;
+        std::cout << "Invalid image path: " << imagePath << std::endl;
         return false;
     }
 
@@ -186,23 +207,19 @@ static bool ApplyEffectToImage(path imagePath, BaseEffect* effect) {
     unsigned char* imageData = stbi_load(imagePath.string().c_str(), &width, &height, &channels, 0);
   
     if (!imageData) {
-        std::cerr << "Error loading image: " << imagePath << std::endl;
+        std::cout << "Error loading image: " << imagePath << std::endl;
         return false;
     }
 
     string* effectError = new string("OK");
-    for (int i=0;i<1;i++){
+
     // Apply Effect on imageData
     if (!effect->ApplyEffectFromRawImageData(imageData, width, height, channels, m_shaderManager, effectError))
     {
-        std::cerr << "Error applying effect to image data: /n" << effectError << std::endl;
+        std::cout << "Error applying effect to image data: /n" << *effectError << std::endl;
         return false;
     }
-    }
-
-   // ShaderManager* SM = new ShaderManager();
-    //SM->test3D(imageData, width, height, channels);//, newImageData);
-
+    
     // Construct the output file name/path
     path outputDir = OUTPUT_IMAGES_FOLDER_PATH; 
     path fileName = imagePath.stem();
@@ -216,7 +233,7 @@ static bool ApplyEffectToImage(path imagePath, BaseEffect* effect) {
     int success = stbi_write_png(outputPath.string().c_str(), width, height, channels, imageData, width * channels);
 
     if (!success) {
-        std::cerr << "Error saving image: " << outputPath << std::endl;
+        std::cout << "Error saving image: " << outputPath << std::endl;
         stbi_image_free(imageData);
         return false;
     }
@@ -272,16 +289,16 @@ int main() {
 
         vector<string> imageOptions = convertImagePathsToStrings(imagePaths);
         int chosenImageIndex = PromptSelectionOptions(imageOptions, SELECT_IMAGE_MESSAGE);
-        std::cout << "\nYou selected: " << imageOptions[chosenImageIndex] << std::endl;
+        //std::cout << "\nYou selected: " << imageOptions[chosenImageIndex] << std::endl;
 
         vector<string> effectsOptions = convertEffectsToStrings(effects);
         int chosenEffect = PromptSelectionOptions(effectsOptions, SELECT_EFFECT_MESSAGE);
-        std::cout << "You selected: " << effects[chosenEffect] << std::endl;
+     //   std::cout << "You selected: " << effects[chosenEffect] << std::endl;
 
+        // apply the chosen effect on the chosen image
+        bool isSuccess = ApplyEffectToImage(imagePaths[chosenImageIndex], effects[chosenEffect]);
 
-        ApplyEffectToImage(imagePaths[chosenImageIndex], effects[chosenEffect]);
-
-        resumeAppFlag = PromptEndingScreen();
+        resumeAppFlag = PromptEndingScreen(isSuccess);
     }
 
     return 1;

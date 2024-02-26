@@ -37,18 +37,140 @@ protected:
 
 class BlurEffect : public BaseEffect {
 public:
-    string GetEffectDisplayName() const override; 
-    string GetEffectFileSuffix() const override; 
+
+    string GetEffectDisplayName() const override
+    {
+        return "Blur";
+    }
+
+    string GetEffectFileSuffix() const override
+    {
+        return "blur";
+    }
+
+protected:
+    LPCWSTR GetPixelShaderFileName() override
+    {
+        return L"shaders/BlurPixelShader.hlsl";
+    }
 };
 
 class ColorInversionEffect : public BaseEffect {
 public:
-    string GetEffectDisplayName() const override;
-    string GetEffectFileSuffix() const override;
+
+    string GetEffectDisplayName() const override
+    {
+        return "Color Inversion";
+    }
+
+    string GetEffectFileSuffix() const override
+    {
+        return "inverted";
+    }
 
 protected:
     LPCWSTR GetPixelShaderFileName() override
     {
         return L"shaders/ColorInversionPixelShader.hlsl";
+    }
+};
+
+class MirrorEffect : public BaseEffect {
+public:
+
+    string GetEffectDisplayName() const override
+    {
+        return "Mirror";
+    }
+
+    string GetEffectFileSuffix() const override
+    {
+        return "mirror";
+    }
+
+protected:
+    LPCWSTR GetVertexShaderFileName() override
+    {
+        return L"shaders/MirrorVertexShader.hlsl";
+    }
+};
+
+class ShrinkEffect : public BaseEffect {
+public:
+
+    string GetEffectDisplayName() const override
+    {
+        return "Shrink";
+    }
+
+    string GetEffectFileSuffix() const override
+    {
+        return "shrink";
+    }
+
+protected:
+    LPCWSTR GetVertexShaderFileName() override
+    {
+        return L"shaders/ShrinkVertexShader.hlsl";
+    }
+};
+
+class FishEyeEffect : public BaseEffect {
+public:
+
+    string GetEffectDisplayName() const override
+    {
+        return "Fish-Eye Effect";
+    }
+
+    string GetEffectFileSuffix() const override
+    {
+        return "fish_eye";
+    }
+
+protected:
+    LPCWSTR GetVertexShaderFileName() override
+    {
+        return L"shaders/FishEyeVertexShader.hlsl";
+    }
+};
+
+class EdgeDetectionEffect : public BaseEffect {
+public:
+
+    string GetEffectDisplayName() const override
+    {
+        return "Edge Detection";
+    }
+
+    string GetEffectFileSuffix() const override
+    {
+        return "edges";
+    }
+
+protected:
+    LPCWSTR GetPixelShaderFileName() override
+    {
+        return L"shaders/EdgeDetectionPixelShader.hlsl";
+    }
+};
+
+class EqualizationEffect : public BaseEffect {
+public:
+
+    string GetEffectDisplayName() const override
+    {
+        return "Equalization";
+    }
+
+    string GetEffectFileSuffix() const override
+    {
+        return "equalize";
+    }
+
+protected:
+    LPCWSTR GetPixelShaderFileName() override
+    {
+        return L"shaders/EqualizationPixelShader.hlsl";
     }
 };

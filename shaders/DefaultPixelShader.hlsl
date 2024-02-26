@@ -11,6 +11,6 @@ struct PSInput
 float4 main(PSInput input) : SV_Target
 {
     float4 texColor = shaderTexture.Sample(samplerState, input.TexCoord);
-    return float4(texColor[0], texColor[1], texColor[2], min(0.3f, texColor[3]));
+    return float4(texColor[0], texColor[1], texColor[2], texColor[3]);
 
 }

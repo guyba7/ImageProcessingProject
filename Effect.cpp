@@ -5,6 +5,7 @@ bool BaseEffect::ApplyEffectFromRawImageData(unsigned char* imageData, int width
     if (!shaderManagerRef) 
     {
         *out_error = "ShaderManager reference is null";
+        std::cout << "ShaderManager reference is null";
         return false;
     }
         
@@ -22,7 +23,8 @@ bool BaseEffect::ApplyEffectFromRawImageData(unsigned char* imageData, int width
     if (!m_vertexShader || !m_pixelShader)
     {
         *out_error = "Effect's shaders are invalid";
-    //    return false;
+        std::cout << "Effect's shaders are invalid";
+        return false;
     }
 
     // apply the shader effect on imageData using the ShaderManager's GPU API
@@ -30,24 +32,4 @@ bool BaseEffect::ApplyEffectFromRawImageData(unsigned char* imageData, int width
         return false;
 
     return true;
-}
-
-string BlurEffect::GetEffectDisplayName() const
-{
-    return "Blur Effect";
-}
-
-string BlurEffect::GetEffectFileSuffix() const
-{
-    return "blur";
-}
-
-string ColorInversionEffect::GetEffectDisplayName() const
-{
-    return "Color Inversion Effect";
-}
-
-string ColorInversionEffect::GetEffectFileSuffix() const
-{
-    return "inverted";
 }
