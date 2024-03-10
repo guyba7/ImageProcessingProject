@@ -18,6 +18,7 @@ public:
     // Returns the file suffix for the effect
     virtual string GetEffectFileSuffix() const = 0;
 
+    // applies this effect on image data buffer
     bool ApplyEffectFromRawImageData(unsigned char* imageData, int width, int height, int channels, ShaderManager* shaderManagerRef, string* out_error);
 
 protected:
@@ -115,26 +116,6 @@ protected:
     }
 };
 
-class FishEyeEffect : public BaseEffect {
-public:
-
-    string GetEffectDisplayName() const override
-    {
-        return "Fish-Eye Effect";
-    }
-
-    string GetEffectFileSuffix() const override
-    {
-        return "fish_eye";
-    }
-
-protected:
-    LPCWSTR GetVertexShaderFileName() override
-    {
-        return L"shaders/FishEyeVertexShader.hlsl";
-    }
-};
-
 class EdgeDetectionEffect : public BaseEffect {
 public:
 
@@ -172,5 +153,25 @@ protected:
     LPCWSTR GetPixelShaderFileName() override
     {
         return L"shaders/EqualizationPixelShader.hlsl";
+    }
+};
+
+class WavesEffect : public BaseEffect {
+public:
+
+    string GetEffectDisplayName() const override
+    {
+        return "Waves Effect";
+    }
+
+    string GetEffectFileSuffix() const override
+    {
+        return "waves";
+    }
+
+protected:
+    LPCWSTR GetPixelShaderFileName() override
+    {
+        return L"shaders/WavesPixelShader.hlsl";
     }
 };

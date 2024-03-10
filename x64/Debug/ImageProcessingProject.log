@@ -1,0 +1,137 @@
+﻿  compilation object save succeeded; see D:\VS Projects\ImageProcessingProject\src\x64\Debug\BlurPixelShader.cso
+  compilation object save succeeded; see D:\VS Projects\ImageProcessingProject\src\x64\Debug\ColorInversionPixelShader.cso
+  compilation object save succeeded; see D:\VS Projects\ImageProcessingProject\src\x64\Debug\DefaultPixelShader.cso
+  compilation object save succeeded; see D:\VS Projects\ImageProcessingProject\src\x64\Debug\DefaultVertexShader.cso
+  compilation object save succeeded; see D:\VS Projects\ImageProcessingProject\src\x64\Debug\EdgeDetectionPixelShader.cso
+  compilation object save succeeded; see D:\VS Projects\ImageProcessingProject\src\x64\Debug\FishEyeVertexShader.cso
+  compilation object save succeeded; see D:\VS Projects\ImageProcessingProject\src\x64\Debug\MirrorVertexShader.cso
+  compilation object save succeeded; see D:\VS Projects\ImageProcessingProject\src\x64\Debug\EqualizationPixelShader.cso
+  compilation object save succeeded; see D:\VS Projects\ImageProcessingProject\src\x64\Debug\ShrinkVertexShader.cso
+  Effect.cpp
+  ImageProcessingProject.cpp
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\filesystem(12): warning STL4038: The contents of <filesystem> are available only with C++17 or later.
+D:\VS Projects\ImageProcessingProject\src\include\stb_image_write.h(778,13): error C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  (compiling source file 'ImageProcessingProject.cpp')
+  
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(19,12): error C3083: 'filesystem': the symbol to the left of a '::' must be a type
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(19,24): error C2039: 'path': is not a member of 'std'
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\string(23,1):
+  see declaration of 'std'
+  
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(19,1): error C2873: 'path': symbol cannot be used in a using-declaration
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(20,21): error C2039: 'filesystem': is not a member of 'std'
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\string(23,1):
+  see declaration of 'std'
+  
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(20,21): error C2878: 'filesystem': a namespace or class of this name does not exist
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(46,36): error C2065: 'path': undeclared identifier
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(46,29): error C2923: 'std::vector': 'path' is not a valid template type argument for parameter '_Ty'
+  D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(46,36):
+  see declaration of 'path'
+  
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(46,29): error C2976: 'std::vector': too few template arguments
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\vector(436,1):
+  see declaration of 'std::vector'
+  
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(51,11): error C2662: 'void std::vector<_Ty,_Alloc>::clear(void) noexcept': cannot convert 'this' pointer from 'std::vector' to 'std::vector<_Ty,_Alloc> &'
+  D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(51,5):
+  Reason: cannot convert from 'std::vector' to 'std::vector<_Ty,_Alloc>'
+  D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(51,5):
+  Conversion requires a second user-defined-conversion operator or constructor
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\vector(1769,23):
+  see declaration of 'std::vector<_Ty,_Alloc>::clear'
+  D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(51,11):
+  while trying to match the argument list '()'
+  
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(53,5): error C2653: 'fs': is not a class or namespace name
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(53,9): error C2065: 'directory_iterator': undeclared identifier
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(53,28): error C2146: syntax error: missing ';' before identifier 'it'
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(53,28): error C3861: 'it': identifier not found
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(55,12): error C2065: 'it': undeclared identifier
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(55,18): error C2653: 'fs': is not a class or namespace name
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(55,22): error C3861: 'directory_iterator': identifier not found
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(56,9): error C2653: 'fs': is not a class or namespace name
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(56,13): error C2065: 'directory_entry': undeclared identifier
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(56,29): error C2146: syntax error: missing ';' before identifier 'entry'
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(56,29): error C2065: 'entry': undeclared identifier
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(56,38): error C2065: 'it': undeclared identifier
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(57,13): error C2065: 'entry': undeclared identifier
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(57,40): error C2065: 'entry': undeclared identifier
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(59,30): error C2065: 'entry': undeclared identifier
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(59,19): error C2663: 'std::vector<_Ty,_Alloc>::push_back': no overloaded function has valid conversion for 'this' pointer
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\vector(874,23):
+  could be 'void std::vector<_Ty,_Alloc>::push_back(_Ty &&)'
+  	D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(59,19):
+  	'void std::vector<_Ty,_Alloc>::push_back(_Ty &&)': cannot convert 'this' pointer from 'std::vector' to 'std::vector<_Ty,_Alloc> &'
+  		D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(59,13):
+  		Reason: cannot convert from 'std::vector' to 'std::vector<_Ty,_Alloc>'
+  		D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(59,13):
+  		Conversion requires a second user-defined-conversion operator or constructor
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\vector(870,23):
+  or       'void std::vector<_Ty,_Alloc>::push_back(const _Ty &)'
+  	D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(59,19):
+  	'void std::vector<_Ty,_Alloc>::push_back(const _Ty &)': cannot convert 'this' pointer from 'std::vector' to 'std::vector<_Ty,_Alloc> &'
+  		D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(59,13):
+  		Reason: cannot convert from 'std::vector' to 'std::vector<_Ty,_Alloc>'
+  		D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(59,13):
+  		Conversion requires a second user-defined-conversion operator or constructor
+  D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(59,19):
+  while trying to match the argument list '()'
+  
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(61,9): error C2065: 'it': undeclared identifier
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(110,42): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(110,28): warning C4267: 'initializing': conversion from 'size_t' to 'const int', possible loss of data
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(203,32): error C2065: 'path': undeclared identifier
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(203,37): error C2146: syntax error: missing ')' before identifier 'imagePath'
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(203,68): error C2143: syntax error: missing ';' before '{'
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(203,68): error C2447: '{': missing function header (old-style formal list?)
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(253,57): error C2065: 'path': undeclared identifier
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(253,50): error C2923: 'std::vector': 'path' is not a valid template type argument for parameter '_Ty'
+  D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(253,57):
+  see declaration of 'path'
+  
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(253,50): error C2976: 'std::vector': too few template arguments
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\vector(436,1):
+  see declaration of 'std::vector'
+  
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(256,10): error C2065: 'path': undeclared identifier
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(256,15): error C2146: syntax error: missing ';' before identifier 'currPath'
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(256,24): error C2143: syntax error: missing ';' before ':'
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(256,24): error C2143: syntax error: missing ')' before ':'
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(256,24): error C2059: syntax error: ':'
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(256,36): error C2059: syntax error: ')'
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(256,37): error C2143: syntax error: missing ';' before '{'
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(257,30): error C2065: 'currPath': undeclared identifier
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(286,12): error C2065: 'path': undeclared identifier
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(286,5): error C2923: 'std::vector': 'path' is not a valid template type argument for parameter '_Ty'
+  D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(286,12):
+  see declaration of 'path'
+  
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(286,5): error C2976: 'std::vector': too few template arguments
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\vector(436,1):
+  see declaration of 'std::vector'
+  
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(286,18): error C2133: 'imagePaths': unknown size
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(286,18): error C2512: 'std::vector': no appropriate default constructor available
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\vector(436,1):
+  see declaration of 'std::vector'
+  
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(296,39): error C2664: 'std::vector<std::string,std::allocator<std::string>> convertImagePathsToStrings(std::vector)': cannot convert argument 1 from 'std::vector' to 'std::vector'
+  D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(296,66):
+  Cannot copy construct class 'std::vector' due to ambiguous copy constructors or no available copy constructor
+  D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(253,23):
+  see declaration of 'convertImagePathsToStrings'
+  D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(296,39):
+  while trying to match the argument list '(std::vector)'
+  
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(305,45): error C2678: binary '[': no operator found which takes a left-hand operand of type 'std::vector' (or there is no acceptable conversion)
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\vector(1900,40):
+  could be 'const _Ty &std::vector<_Ty,_Alloc>::operator [](const allocator_traits<allocator_traits<_Alloc>::rebind_alloc<_Ty>>::size_type) noexcept const'
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\vector(1890,34):
+  or       '_Ty &std::vector<_Ty,_Alloc>::operator [](const allocator_traits<allocator_traits<_Alloc>::rebind_alloc<_Ty>>::size_type) noexcept'
+  D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(305,45):
+  while trying to match the argument list '(std::vector, int)'
+  
+D:\VS Projects\ImageProcessingProject\src\ImageProcessingProject.cpp(305,26): error C2064: term does not evaluate to a function taking 2 arguments
+  ShaderManager.cpp
+  Generating Code...

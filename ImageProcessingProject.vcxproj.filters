@@ -35,6 +35,12 @@
     <ClInclude Include="Effect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\stb_image_write.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ImageProcessingProject.rc">
@@ -60,13 +66,13 @@
     <FxCompile Include="shaders\ShrinkVertexShader.hlsl">
       <Filter>Source Files\shaders</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\FishEyeVertexShader.hlsl">
-      <Filter>Source Files\shaders</Filter>
-    </FxCompile>
     <FxCompile Include="shaders\EdgeDetectionPixelShader.hlsl">
       <Filter>Source Files\shaders</Filter>
     </FxCompile>
     <FxCompile Include="shaders\EqualizationPixelShader.hlsl">
+      <Filter>Source Files\shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\WavesPixelShader.hlsl">
       <Filter>Source Files\shaders</Filter>
     </FxCompile>
   </ItemGroup>

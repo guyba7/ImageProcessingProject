@@ -30,7 +30,7 @@ ID3D11Device* m_device = nullptr;
 ID3D11DeviceContext* m_deviceContext = nullptr;
 D3D_FEATURE_LEVEL m_deviceFeatureLevel;
 
-
+// initialize the shader manager by creating device and device context from D3D
 bool ShaderManager::initalizeShaderManager(string* out_error)
 {
     HRESULT hr;
@@ -66,6 +66,7 @@ bool ShaderManager::initalizeShaderManager(string* out_error)
     return true;
 }
 
+// initialized to 2D rectangle quad the represents the viewport of the image
 bool ShaderManager::initializeVertices(string* out_error)
 {
     HRESULT hr;
@@ -100,6 +101,8 @@ bool ShaderManager::initializeVertices(string* out_error)
     return true;
 }
 
+// compiles shaders from files, then creates both pixel shaders and vertex shader.
+// Also creates the input layout of vertex shader
 bool ShaderManager::createShadersFromFiles(LPCWSTR pixelShaderFileName, LPCWSTR vertexShaderFileName, ID3D11VertexShader** out_vertexShader, ID3D11PixelShader** out_pixelShader, string* out_error)
 {
     HRESULT hr;
@@ -240,6 +243,9 @@ bool ShaderManager::createShadersFromFiles(LPCWSTR pixelShaderFileName, LPCWSTR 
     return true;
 }
 
+// recieves image data buffer, and shaders (pixel and vertex) to use to apply effect on the shader.
+// this method intializes tje shader manager if first time, then creates the GPU textures requires to perform the shader operation.
+// At the end it overrides the imageData with new data recieved from the GPU texture.
 bool ShaderManager::applyShaderOnImageData(unsigned char* imageData, int width, int height, int channels, ID3D11PixelShader* pixelShader, ID3D11VertexShader* vertexShader, string* out_error)
 {
     HRESULT hr;
@@ -265,7 +271,7 @@ bool ShaderManager::applyShaderOnImageData(unsigned char* imageData, int width, 
         return false;
     }
 
-    // apply source texture as shader resource view of context
+    // apply source texture as shader resource view of context (input texture)
     ID3D11ShaderResourceView* sourceTextureView = nullptr;
     hr = m_device->CreateShaderResourceView(sourceTexture, nullptr, &sourceTextureView);
     if (FAILED(hr)) 
@@ -279,7 +285,7 @@ bool ShaderManager::applyShaderOnImageData(unsigned char* imageData, int width, 
     ID3D11ShaderResourceView* views[] = { sourceTextureView };
     m_deviceContext->PSSetShaderResources(0, 1, views);
 
-    // apply render target as render target view of context
+    // apply render target as render target view of context (output texture)
     ID3D11RenderTargetView* renderTargetView = nullptr;
     hr = m_device->CreateRenderTargetView(renderTargetTexture, nullptr, &renderTargetView);
     if (FAILED(hr)) 
@@ -293,16 +299,16 @@ bool ShaderManager::applyShaderOnImageData(unsigned char* imageData, int width, 
     m_deviceContext->OMSetRenderTargets(1, &renderTargetView, nullptr); // Assuming no depth stencil
 
 
-    // apply shaders
+    // apply shaders to context
     m_deviceContext->PSSetShader(pixelShader, nullptr, 0);
     m_deviceContext->VSSetShader(vertexShader, nullptr, 0);
 
-    // draw shader onto render target texture
+    // draw shader onto render target texture using the 4 vertices of the Quad rectangle
     m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
     m_deviceContext->Draw(sizeof(RECT_QUAD_VERTICES), 0); // Drawing 4 vertices, using a triangle strip to form a quad.
 
 
-    // copy render target texture to staging texture and then override imageData data block with rendered pixels
+    // copy render target texture to staging texture and then override imageData data block with rendered pixels on the staging texture
     if (!copyRenderTargetToImageData(imageData, width, height, channels, renderTargetTexture, stagingTexture, out_error))
     {
         if (sourceTexture) sourceTexture->Release();
@@ -321,6 +327,7 @@ bool ShaderManager::applyShaderOnImageData(unsigned char* imageData, int width, 
     return true;
 }
 
+// initializes render viewport
 void ShaderManager::initializeViewport(int width, int height)
 {
     D3D11_VIEWPORT viewport = {};
@@ -331,6 +338,7 @@ void ShaderManager::initializeViewport(int width, int height)
     m_deviceContext->RSSetViewports(1, &viewport);
 }
 
+// copies row by row the data from the render target GPU texture to the CPU in the targetImageDataBlock memory buffer.
 bool ShaderManager::copyRenderTargetToImageData(unsigned char* targetImageDataBlock, int width, int height, int channels, ID3D11Texture2D* renderTargetTexture, ID3D11Texture2D* stagingTexture, string* out_error)
 {
     HRESULT hr;
@@ -367,6 +375,12 @@ bool ShaderManager::copyRenderTargetToImageData(unsigned char* targetImageDataBl
     return true;
 }
 
+/* 
+    create the 3 GPU textures that are required for the rendering process :
+    sourceTexture - input recieved from imageData.
+    renderTargetTexture - output of the shader after drawing.
+    stagingTexture - the Texture the can be offloaded from the GPU and copied by the CPU 
+*/
 bool ShaderManager::create2DTextures(unsigned char* imageData, int width, int height, ID3D11Texture2D** out_sourceTexture, ID3D11Texture2D** out_renderTargetTexture, ID3D11Texture2D** out_stagingTexture, string* out_error)
 {
     HRESULT hr;
@@ -377,13 +391,13 @@ bool ShaderManager::create2DTextures(unsigned char* imageData, int width, int he
 
     // Describtion of all textures
     D3D11_TEXTURE2D_DESC textureDesc = {};
-    textureDesc.Width = width; // Texture width.
-    textureDesc.Height = height; // Texture height.
-    textureDesc.MipLevels = 1; // Number of mipmap levels.
-    textureDesc.ArraySize = 1; // Number of textures in the texture array.
+    textureDesc.Width = width;                       // Texture width.
+    textureDesc.Height = height;                     // Texture height.
+    textureDesc.MipLevels = 1;                       // Number of mipmap levels.
+    textureDesc.ArraySize = 1;                       // Number of textures in the texture array.
     textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // Pixel format of the texture.
-    textureDesc.SampleDesc.Count = 1; // The number of multisamples per pixel.
-    textureDesc.Usage = D3D11_USAGE_DEFAULT; // Specify how the texture is to be read from and written to.
+    textureDesc.SampleDesc.Count = 1;                // The number of multisamples per pixel.
+    textureDesc.Usage = D3D11_USAGE_DEFAULT;         // Specify how the texture is to be read from and written to.
     
 
     D3D11_SUBRESOURCE_DATA subResourceData = {};
@@ -392,13 +406,13 @@ bool ShaderManager::create2DTextures(unsigned char* imageData, int width, int he
     //////////////////////// Create Source Texture ////////////////////////
 
     // Provide initial data to populate the source texture.
-    subResourceData.pSysMem = imageData; // Pointer to the initialization data.
+    subResourceData.pSysMem = imageData;                // Pointer to the initialization data.
     textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE; // Bind the texture to the shader resource.
 
     // Create the source texture from the provided data.
     hr = m_device->CreateTexture2D(
-        &textureDesc,      // Pointer to a D3D11_TEXTURE2D_DESC structure that describes the texture.
-        &subResourceData,  // Pointer to an array of D3D11_SUBRESOURCE_DATA structures that describe subresources for the 2D texture. This parameter can be NULL if you do not need to initialize the texture with data upon creation.
+        &textureDesc,            // Pointer to a D3D11_TEXTURE2D_DESC structure that describes the texture.
+        &subResourceData,        // Pointer to an array of D3D11_SUBRESOURCE_DATA structures that describe subresources for the 2D texture. This parameter can be NULL if you do not need to initialize the texture with data upon creation.
         &sourceTexture);         // Address of a pointer to an ID3D11Texture2D interface that represents the created texture.
 
     if (FAILED(hr)) 
@@ -416,8 +430,8 @@ bool ShaderManager::create2DTextures(unsigned char* imageData, int width, int he
     textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET;
 
     hr = m_device->CreateTexture2D(
-        &textureDesc,      // Pointer to a D3D11_TEXTURE2D_DESC structure that describes the texture.
-        &subResourceData,  // Pointer to an array of D3D11_SUBRESOURCE_DATA structures that describe subresources for the 2D texture. This parameter can be NULL if you do not need to initialize the texture with data upon creation.
+        &textureDesc,                  // Pointer to a D3D11_TEXTURE2D_DESC structure that describes the texture.
+        &subResourceData,              // Pointer to an array of D3D11_SUBRESOURCE_DATA structures that describe subresources for the 2D texture. This parameter can be NULL if you do not need to initialize the texture with data upon creation.
         &renderTargetTexture);         // Address of a pointer to an ID3D11Texture2D interface that represents the created texture.
 
     if (FAILED(hr)) {
@@ -432,13 +446,13 @@ bool ShaderManager::create2DTextures(unsigned char* imageData, int width, int he
     //////////////////////// Create Staging Texture ////////////////////////
 
     // Configuration for staging texture
-    textureDesc.Usage = D3D11_USAGE_STAGING; // Specify how the texture allows data transfer between GPU and CPU.
-    textureDesc.BindFlags = 0; // No binding
+    textureDesc.Usage = D3D11_USAGE_STAGING;            // Specify how the texture allows data transfer between GPU and CPU.
+    textureDesc.BindFlags = 0;                          // No binding
     textureDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ; // Allows the CPU to access the data
 
     hr = m_device->CreateTexture2D(
-        &textureDesc,      // Pointer to a D3D11_TEXTURE2D_DESC structure that describes the texture.
-        &subResourceData,  // Pointer to an array of D3D11_SUBRESOURCE_DATA structures that describe subresources for the 2D texture. This parameter can be NULL if you do not need to initialize the texture with data upon creation.
+        &textureDesc,             // Pointer to a D3D11_TEXTURE2D_DESC structure that describes the texture.
+        &subResourceData,         // Pointer to an array of D3D11_SUBRESOURCE_DATA structures that describe subresources for the 2D texture. This parameter can be NULL if you do not need to initialize the texture with data upon creation.
         &stagingTexture);         // Address of a pointer to an ID3D11Texture2D interface that represents the created texture.
 
     if (FAILED(hr)) {
@@ -458,6 +472,7 @@ bool ShaderManager::create2DTextures(unsigned char* imageData, int width, int he
     return true;
 }
 
+// release all GPU resources stores as members in the shader manager
 void ShaderManager::releaseAllD3DMembers()
 {
     if (m_deviceContext) m_deviceContext->Release();

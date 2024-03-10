@@ -6,9 +6,11 @@
 
 #include "Effect.h"
 
+// used for decoding PNG
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
+// used for encoding PNG
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
@@ -17,22 +19,22 @@ using std::vector;  // Make vector available as 'vector'
 using std::filesystem::path;
 namespace fs = std::filesystem;
 
-#define INPUT_IMAGES_FOLDER_PATH "../Input Images";
-#define OUTPUT_IMAGES_FOLDER_PATH "../Output Images";
+#define INPUT_IMAGES_FOLDER_PATH "../inputPNG";
+#define OUTPUT_IMAGES_FOLDER_PATH "../outputPNG";
 
 #define WELCOME_MESSAGE "Welcome to the PNG Processing Application!\n"\
                         "This application allows you to apply effects to images.\n"\
                         "Press ENTER to continue.\n"
 
 #define SELECT_IMAGE_MESSAGE "Select a PNG image to apply effect on.\n"\
-                             "Use the UP and DOWN arrow keys to navigate options.\n"\
+                             "Use the UP and DOWN arrow keys or use the number keys to navigate options.\n"\
                              "Press ENTER to select an option.\n\n"
 
 #define SELECT_EFFECT_MESSAGE "Select an effect to apply to the image.\n"\
-                             "Use the UP and DOWN arrow keys to navigate options.\n"\
+                             "Use the UP and DOWN arrow keys or use the number keys to navigate options.\n"\
                              "Press ENTER to select an option.\n\n"
 
-#define ENDING_MESSAGE "Image with effect created successfully!\n"\
+#define ENDING_MESSAGE_SUCCESS "Image with effect created successfully!\n"\
                         "Press ENTER to create a new image or press ESC to close application.\n"
 
 #define ENDING_MESSAGE_ERORR "Image processing failed...\n"\
@@ -40,6 +42,7 @@ namespace fs = std::filesystem;
 
 ShaderManager* m_shaderManager = new ShaderManager();
 
+// initailizes the lists of effects and images
 static void InitializeLists(vector<path>& images, vector<BaseEffect*>& effects) {
 
     string inputImagesPath = INPUT_IMAGES_FOLDER_PATH;
@@ -58,7 +61,7 @@ static void InitializeLists(vector<path>& images, vector<BaseEffect*>& effects) 
         it++;
     }
 
-    // Initialize effects (remains unchanged)
+    // Initialize effects
     effects = {
         new BlurEffect(),
         new ColorInversionEffect(),
@@ -66,13 +69,15 @@ static void InitializeLists(vector<path>& images, vector<BaseEffect*>& effects) 
         new ShrinkEffect(),
         new EdgeDetectionEffect(),
         new EqualizationEffect(),
-        new FishEyeEffect()
+        new WavesEffect()
     };
 
 }
 
 
-static void DisplayMenu(const vector<string>& options, int highlight, const string& instruction) {
+// displays options menu with one highlighted option
+static void DisplayMenu(const vector<string>& options, int highlight, const string& instruction) 
+{
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
     // Clear the screen
@@ -84,13 +89,13 @@ static void DisplayMenu(const vector<string>& options, int highlight, const stri
 
     for (size_t i = 0; i < options.size(); ++i) {
         if (i == highlight) {
-            // Attempt to make the text "brighter" as a substitute for bold, since true bold is not supported
+            // make selected option text green
             SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);  // Green and intense (brighter)
-            std::cout << "> " << options[i] << std::endl;
+            std::cout << "> " << i + 1 << ") " << options[i] << std::endl;
             SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);  // Reset to default color
         }
         else {
-            std::cout << "  " << options[i] << std::endl;
+            std::cout << "  " <<  i + 1 << ") " << options[i] << std::endl;
         }
     }
 
@@ -98,8 +103,9 @@ static void DisplayMenu(const vector<string>& options, int highlight, const stri
     SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
-
-static int PromptSelectionOptions(const vector<string>& options, const char* prompt) {
+// prompt an options menu with user navigation
+static int PromptSelectionOptions(const vector<string>& options, const char* prompt) 
+{
     int selection = 0;  // Currently selected option index
     const int optionsCount = options.size();
 
@@ -120,6 +126,16 @@ static int PromptSelectionOptions(const vector<string>& options, const char* pro
         ReadConsoleInput(hStdin, &inputRecord, 1, &eventsRead);
 
         if (inputRecord.EventType == KEY_EVENT && inputRecord.Event.KeyEvent.bKeyDown) {
+
+            // handle number input
+            if (inputRecord.Event.KeyEvent.wVirtualKeyCode < 0x39 && inputRecord.Event.KeyEvent.wVirtualKeyCode > 0x31)
+            {
+                int numberSelected = inputRecord.Event.KeyEvent.wVirtualKeyCode - 0x31;
+                if (numberSelected < optionsCount)
+                    selection = numberSelected;
+            }
+
+            // handle non-number inputs
             switch (inputRecord.Event.KeyEvent.wVirtualKeyCode) {
             case VK_UP:
                 selection = (selection - 1 + optionsCount) % optionsCount;
@@ -130,6 +146,7 @@ static int PromptSelectionOptions(const vector<string>& options, const char* pro
             case VK_RETURN:  // Enter key
                 SetConsoleMode(hStdin, mode);  // Restore console mode
                 return selection;
+
             }
 
             DisplayMenu(options, selection, prompt);  // Update the display with the new selection
@@ -137,6 +154,7 @@ static int PromptSelectionOptions(const vector<string>& options, const char* pro
     }
 }
 
+// prompts to user thge welcome screen
 static void PromptWelcomeScreen() {
 
     // Clear the screen
@@ -157,6 +175,7 @@ static void PromptWelcomeScreen() {
     }
 }
 
+// prompts to user thge ending screen
 static bool PromptEndingScreen(bool isSuccess) {
 
     if (!isSuccess)
@@ -167,7 +186,7 @@ static bool PromptEndingScreen(bool isSuccess) {
 
     if (isSuccess)
     {
-        std::cout << ENDING_MESSAGE;
+        std::cout << ENDING_MESSAGE_SUCCESS;
     }
     else
     {
@@ -194,6 +213,7 @@ static bool PromptEndingScreen(bool isSuccess) {
     }
 }
 
+// applies the seceted effect to the selected image
 static bool ApplyEffectToImage(path imagePath, BaseEffect* effect) {
     int width, height, channels;
     
@@ -203,7 +223,7 @@ static bool ApplyEffectToImage(path imagePath, BaseEffect* effect) {
         return false;
     }
 
-    // Load the image
+    // decode the PNG
     unsigned char* imageData = stbi_load(imagePath.string().c_str(), &width, &height, &channels, 0);
   
     if (!imageData) {
@@ -229,7 +249,7 @@ static bool ApplyEffectToImage(path imagePath, BaseEffect* effect) {
     // Ensure the output directory exists
     create_directories(outputDir);
 
-    // Save the image back to disk
+    // encodes the manipulated PNG back to disk
     int success = stbi_write_png(outputPath.string().c_str(), width, height, channels, imageData, width * channels);
 
     if (!success) {
@@ -244,6 +264,7 @@ static bool ApplyEffectToImage(path imagePath, BaseEffect* effect) {
     return true;
 }
 
+// striginfy the image names
 static vector<string> convertImagePathsToStrings(vector<path> imagePaths) {
     vector<string> imageNames;
 
@@ -254,6 +275,7 @@ static vector<string> convertImagePathsToStrings(vector<path> imagePaths) {
     return imageNames;
 }
 
+// striginfy the effect names
 static vector<string> convertEffectsToStrings(vector<BaseEffect*> Effects) {
     vector<string> effectNames;
 
@@ -264,7 +286,7 @@ static vector<string> convertEffectsToStrings(vector<BaseEffect*> Effects) {
     return effectNames;
 }
 
-
+// the entry point of the application
 int main() {
 
     string* errorString = new string("OK");
@@ -281,6 +303,7 @@ int main() {
     vector<BaseEffect*> effects;
     InitializeLists(imagePaths, effects);
 
+    // prompt welcome screen on start
     PromptWelcomeScreen();
 
     bool resumeAppFlag = 1;
@@ -289,11 +312,9 @@ int main() {
 
         vector<string> imageOptions = convertImagePathsToStrings(imagePaths);
         int chosenImageIndex = PromptSelectionOptions(imageOptions, SELECT_IMAGE_MESSAGE);
-        //std::cout << "\nYou selected: " << imageOptions[chosenImageIndex] << std::endl;
 
         vector<string> effectsOptions = convertEffectsToStrings(effects);
         int chosenEffect = PromptSelectionOptions(effectsOptions, SELECT_EFFECT_MESSAGE);
-     //   std::cout << "You selected: " << effects[chosenEffect] << std::endl;
 
         // apply the chosen effect on the chosen image
         bool isSuccess = ApplyEffectToImage(imagePaths[chosenImageIndex], effects[chosenEffect]);

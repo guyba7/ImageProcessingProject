@@ -22,9 +22,6 @@
       <FullPath>D:\VS Projects\ImageProcessingProject\src\x64\Release\EdgeDetectionPixelShader.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>D:\VS Projects\ImageProcessingProject\src\x64\Release\FishEyeVertexShader.cso</FullPath>
-    </ContentFile>
-    <ContentFile>
       <FullPath>D:\VS Projects\ImageProcessingProject\src\x64\Release\MirrorVertexShader.cso</FullPath>
     </ContentFile>
     <ContentFile>
@@ -32,6 +29,9 @@
     </ContentFile>
     <ContentFile>
       <FullPath>D:\VS Projects\ImageProcessingProject\src\x64\Release\ShrinkVertexShader.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>D:\VS Projects\ImageProcessingProject\src\x64\Release\WavesPixelShader.cso</FullPath>
     </ContentFile>
   </ContentFiles>
   <SatelliteDlls />
